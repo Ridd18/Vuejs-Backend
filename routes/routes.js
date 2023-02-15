@@ -17,20 +17,18 @@ import {
   loginUser,
 } from "../controllers/Users.js";
 
-import { createRequire } from "module";
-const require = createRequire(import.meta.url);
+import {upload} from "../multer/multer.js"
 
-const multer = require("multer");
-// import {upload} from "../multer/multer.js"
-
+import { download, getListFiles } from "../models/fileModel.js"
 
 // init express router
 const router = express.Router();
 
+//get all files
+router.get("/files",getListFiles);
 
-const upload = multer({
-  dest: "./uploads",
-});
+//download
+router.get("files/:name",download)
 
 //upload
 router.post("/upload", upload.single("file"), (req, res) => {
