@@ -28,7 +28,10 @@ const router = express.Router();
 router.get("/files",getListFiles);
 
 //download
-router.get("files/:name",download)
+router.get("files/:fileName",download)
+
+// //download
+// router.get("files/download",download)
 
 //upload
 router.post("/upload", upload.single("file"), (req, res) => {
