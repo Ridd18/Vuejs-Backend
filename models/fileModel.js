@@ -3,7 +3,10 @@ import db from "../config/database.js";
 import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
 const fs = require("fs");
+const mime = require('mime');
 
+
+const buf = require('buffer')
 
 const baseUrl = "http://localhost:5000/";
 
@@ -41,17 +44,18 @@ export const download = (req, res) => {
   const directoryPath = baseDir + "/uploads/";
 
   const file = directoryPath + fileName ;
+  const mimetype = mime.lookup(file);
 
-  // res.writeHead(200, {
-  //   'Content-Disposition': `attachment; filename="${fileName}"`,
-    
-  //   'Content-Type': fileType,
-  // })
+  console.log(mimetype);
 
+  // const stream = fs.createReadStream(file);
+  
+  res.setHeader('Content-Type', mimetype)
+  
   res.setHeader('Content-disposition', `attachment; filename="${fileName}"`);
 
-
-
+//  stream.pipe(res);
+  
   res.download(file, fileName, (err) => {
     console.log(file);
     console.log(fileName);
@@ -63,22 +67,4 @@ export const download = (req, res) => {
   });
 };
 
-// //add files to database
-// //something like a model for file
-// export const uploadFile = (data, result) => {
-//     upload.single("file")
-//     console.log("filename in filemodel",data)
-//   db.query(
-//     "INSERT INTO file SET file_name = ?",
-//     [data],
-   
-//     (err, results) => {
-//       if (err) {
-//         console.log(err);
-//         result(err, null);
-//       } else {
-//         result(null, results);
-//       }
-//     }
-//   );
-// };
+
